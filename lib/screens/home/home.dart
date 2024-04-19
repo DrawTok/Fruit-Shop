@@ -1,53 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:fruitshop/screens/home/widgets/item_cart.dart';
+import 'package:fruitshop/controllers/home/home_controller.dart';
+import 'package:fruitshop/screens/home/widgets/category.dart';
+import 'package:fruitshop/screens/home/widgets/custom_sliver.dart';
+import 'package:fruitshop/screens/home/widgets/form_slider.dart';
+import 'package:fruitshop/screens/home/widgets/product_list.dart';
 import 'package:fruitshop/utils/constants/sizes.dart';
+import 'package:fruitshop/utils/constants/styles.dart';
+import 'package:get/get.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          body: Stack(
-        children: [
-          GridView.builder(
-              itemCount: 10,
-              shrinkWrap: true,
-              padding: const EdgeInsets.all(TSizes.spacing10),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisExtent: 200,
-                  mainAxisSpacing: TSizes.spacing8,
-                  crossAxisSpacing: TSizes.spacing8),
-              itemBuilder: (_, index) => const ItemCard()),
-          Positioned(
-            child: Container(
-              padding: const EdgeInsets.all(TSizes.spacing10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Search fruit',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: TSizes.spacing10),
-                  TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      hintText: 'Search',
-                      prefixIcon: const Icon(Icons.search),
-                    ),
-                  )
-                ],
+    HomeController controller = Get.put(HomeController());
+
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: CustomScrollView(
+          slivers: [
+            const TSliverAppBar(),
+            const SliverPadding(
+              padding: EdgeInsets.all(TSizes.spacing16),
+              sliver: SliverToBoxAdapter(
+                child: TFormSlider(),
               ),
             ),
-          ),
-        ],
-      )),
-    );
+            const TCategory(),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: TSizes.spacing16),
+              sliver: SliverToBoxAdapter(
+                child: Text(
+                  'Đề xuất',
+                  style: Styles.title1,
+                ),
+              ),
+            ),
+            const ProductList(),
+          ],
+        ));
   }
 }
+
+
