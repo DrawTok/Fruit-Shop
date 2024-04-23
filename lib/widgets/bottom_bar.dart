@@ -1,29 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:fruitshop/controllers/bottom_bar_controller.dart';
+import 'package:fruitshop/controllers/bottom_bar/bottom_bar_controller.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class BottomBar extends StatelessWidget {
+class BottomBar extends GetView<BottomBarController> {
   const BottomBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(BottomBarController());
-
-    return Scaffold(
-      bottomNavigationBar: NavigationBar(
-        height: 80,
-        elevation: 0,
-        selectedIndex: controller.selectedItem.value,
-        onDestinationSelected: (index) => controller.selectedItem.value = index,
-        destinations: const [
-          NavigationDestination(icon: Icon(Iconsax.home), label: 'Home'),
-          NavigationDestination(icon: Icon(Iconsax.shop), label: 'Store'),
-          NavigationDestination(icon: Icon(Iconsax.heart), label: 'Favorite'),
-          NavigationDestination(icon: Icon(Iconsax.user), label: 'Profile'),
-        ],
-      ),
-      body: Obx(() => controller.screens[controller.selectedItem.value]),
+    return SafeArea(
+      child: Obx(() => Scaffold(
+            bottomNavigationBar: NavigationBar(
+              height: 80,
+              elevation: 0,
+              selectedIndex: controller.selectedItem.value,
+              onDestinationSelected: (index) => controller.changeScreen(index),
+              destinations: const [
+                NavigationDestination(
+                    icon: Icon(Iconsax.home), label: 'Trang chủ'),
+                NavigationDestination(
+                    icon: Icon(Iconsax.category), label: 'Danh mục'),
+                    NavigationDestination(
+                    icon: Icon(Iconsax.shopping_cart), label: 'Giỏ hàng'),
+                NavigationDestination(
+                    icon: Icon(Iconsax.gift), label: 'Ưu đãi'),
+                NavigationDestination(
+                    icon: Icon(Iconsax.user), label: 'Thông tin'),
+              ],
+            ),
+            body: controller.screens[controller.selectedItem.value].page(),
+          )),
     );
   }
 }
