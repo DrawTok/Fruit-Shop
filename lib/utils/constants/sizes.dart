@@ -1,13 +1,16 @@
 class TSizes {
+  TSizes._();
   //Padding and Margin
-  static const double spacing4 = 4.0;
   static const double spacing8 = 8.0;
   static const double spacing10 = 10.0;
   static const double spacing16 = 16.0;
   static const double spacing20 = 20.0;
-  static const double spacing25 = 25.0;
   static const double spacing24 = 24.0;
   static const double spacing32 = 32.0;
+  static const double spacing40 = 40.0;
+  static const double spacing48 = 48.0;
+  static const double spacing56 = 56.0;
+  static const double spacing64 = 64.0;
 
   //size box height
   static const double sizeBoxHeight4 = 4.0;
@@ -39,7 +42,8 @@ class TSizes {
   static const double borderRadius8 = 8;
   static const double borderRadius10 = 10;
   static const double borderRadius12 = 12;
-  static const double borderRadius999 = 999;
+  static const double borderRadius20 = 20;
+  static const double borderRadius100 = 100;
 
   //Divider
   static const double dividerHeight = 1.0;

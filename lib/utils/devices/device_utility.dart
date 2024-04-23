@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/route_manager.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class TDeviceUtility {
   static void hideKeyBoard(BuildContext context) {
@@ -45,5 +46,10 @@ class TDeviceUtility {
   static void showStatusBar() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
+  }
+
+  static Future<String> getVersion() async{
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    return packageInfo.version;
   }
 }

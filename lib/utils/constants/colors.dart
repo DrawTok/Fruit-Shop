@@ -8,6 +8,7 @@ class TColors {
   static Color grayText = const Color(0xFFA2A7AF);
   static Color grayPrimary = const Color(0xFF686878);
   static Color graySecondary = const Color(0xFFC8C8D5);
+  static Color graySecOpacity = graySecondary.withOpacity(0.1);
 
   static Color greenPrimary = const Color(0xFF00B761);
 
