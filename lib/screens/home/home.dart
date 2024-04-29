@@ -30,10 +30,7 @@ class Home extends StatelessWidget {
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: TSizes.spacing16),
               sliver: SliverToBoxAdapter(
-                child: Text(
-                  'Đề xuất',
-                  style: Styles.title1,
-                ),
+                child: Text('Đề xuất', style: Styles.title1),
               ),
             ),
             const ProductList(),
@@ -41,5 +38,3 @@ class Home extends StatelessWidget {
         ));
   }
 }
-
-

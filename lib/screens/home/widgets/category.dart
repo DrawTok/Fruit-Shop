@@ -33,13 +33,14 @@ class TCategory extends GetView<HomeController> {
               () => SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: controller.categories.map((category) {     
+                  children: controller.categories.map((category) {
                     return ItemCategory(
                       id: category.id,
                       imageUrl: category.image,
                       nameCategory: category.name,
                       width: screenWidth,
                       isNetworkImage: true,
+                      onChooseCategory: controller.onChooseCategory,
                     );
                   }).toList(),
                 ),

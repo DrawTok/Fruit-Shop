@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:fruitshop/controllers/home/home_controller.dart';
 import 'package:fruitshop/utils/constants/colors.dart';
 import 'package:fruitshop/utils/constants/sizes.dart';
 import 'package:fruitshop/utils/constants/styles.dart';
-import 'package:get/get.dart';
 
-class ItemCategory extends GetView<HomeController> {
+class ItemCategory extends StatelessWidget {
   const ItemCategory(
       {super.key,
       required this.id,
       required this.imageUrl,
       this.isNetworkImage = false,
       required this.nameCategory,
-      required this.width});
+      required this.width,
+      required this.onChooseCategory});
 
   final String id;
   final String imageUrl;
   final bool isNetworkImage;
   final String nameCategory;
   final double width;
+  final Function(String id) onChooseCategory;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        controller.onChooseCategory(id);
+        onChooseCategory(id);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(

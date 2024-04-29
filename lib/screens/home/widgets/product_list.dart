@@ -5,9 +5,7 @@ import 'package:fruitshop/utils/constants/sizes.dart';
 import 'package:get/get.dart';
 
 class ProductList extends GetView<HomeController> {
-  const ProductList({
-    super.key,
-  });
+  const ProductList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +19,12 @@ class ProductList extends GetView<HomeController> {
             delegate: SliverChildBuilderDelegate(
               (_, index) => ItemCard(
                   index: index,
+                  productId: controller.products[index].id,
                   image: controller.products[index].image,
                   name: controller.products[index].name,
-                  price: controller.products[index].price),
+                  price: controller.products[index].price,
+                  addCart: controller.addCart,
+                  onShowDetail: controller.displayDetailProduct),
               childCount: controller.products.length,
             ),
           ),
