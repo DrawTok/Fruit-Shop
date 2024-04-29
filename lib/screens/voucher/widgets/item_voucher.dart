@@ -27,7 +27,6 @@ class ItemVoucher extends GetView<VoucherController> {
           decoration: BoxDecoration(
               color: TColors.greenPrimary,
               borderRadius: BorderRadius.circular(TSizes.borderRadius8)),
-          padding: const EdgeInsets.symmetric(vertical: TSizes.spacing8),
           child: Stack(
             children: [
               Row(
