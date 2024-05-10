@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fruitshop/http/http_client.dart';
 import 'package:fruitshop/local_storage/storage_utility.dart';
+import 'package:fruitshop/utils/constants/text_strings.dart';
 import 'package:fruitshop/utils/devices/device_utility.dart';
+import 'package:fruitshop/utils/helper/helper_function.dart';
 import 'package:fruitshop/utils/validators/validation.dart';
 import 'package:get/get.dart';
 
@@ -23,8 +25,12 @@ class SignInController extends GetxController {
 
   String? validateEmail(String? value) => TValidator.validateEmail(value);
 
-  String? validatePassword(String? password) =>
-      TValidator.validatePassword(password);
+  String? validatePassword(String? password) {
+    if (password == null || password.isEmpty) {
+      return TTexts.requiredPassword;
+    }
+    return null;
+  }
 
   void onSubmit() async {
     final isValid = formKeySignIn.currentState!.validate();
@@ -35,16 +41,17 @@ class SignInController extends GetxController {
 
     TDeviceUtility.hideKeyBoard(Get.context!);
 
-    var response = await THttpHelper.post('users/login', {
-      "username": email.toLowerCase(),
+    var response = await THttpHelper.post('user/login', {
+      "email": email.toLowerCase(),
       "password": password,
     });
-    if (response['code'] == 1003) {
-      saveToken(response['data']['token']);
-      //HelperFunctions.showSnackBar(response, 'Thành công');
-      //Get.to(const OTPScreen(), arguments: email);
+
+    if (response['_id'] != null) {
+      saveToken(response);
+      HelperFunctions.showSnackBar(TTexts.successful, TTexts.signInSuccess);
+      Get.toNamed('/bottomBar');
     } else {
-      //HelperFunctions.showSnackBar(response, 'Thất bại');
+      HelperFunctions.showSnackBar(TTexts.fail, TTexts.signInFail);
     }
   }
 
@@ -56,8 +63,9 @@ class SignInController extends GetxController {
     } */
   }
 
-  void saveToken(String token) {
+  void saveToken(Map<String, dynamic> response) {
     TLocalStorage localStorage = TLocalStorage();
-    localStorage.saveData('token', token);
+    localStorage.clearData();
+    localStorage.saveData('user', response);
   }
 }

@@ -1,11 +1,16 @@
 import 'dart:async';
+import 'package:fruitshop/controllers/cart/cart_controller.dart';
+import 'package:fruitshop/http/http_client.dart';
 import 'package:fruitshop/providers/data_provider.dart';
 import 'package:fruitshop/providers/database_provider.dart';
 import 'package:fruitshop/screens/product/product_detail.dart';
+import 'package:fruitshop/utils/constants/text_strings.dart';
+import 'package:fruitshop/utils/helper/helper_function.dart';
 import 'package:get/get.dart';
 
 class TSearchController extends GetxController {
   static TSearchController get instance => Get.find();
+  CartController cartController = Get.find();
 
   var products = [].obs;
   var filteredProducts = [].obs;
@@ -17,18 +22,20 @@ class TSearchController extends GetxController {
   Timer? _debounce;
 
   void addCart(int index) async {
-    final product = filteredProducts[index];
-    await DatabaseProvider.insertCart({
-      'id': product.id,
-      'name': product.name,
-      'description': product.description,
-      'price': product.price,
-      'quantity': product.quantity,
-      'orderQuantity': 1,
-      'image': product.image,
-      'createdAt': product.createdAt.toString(),
-      'updatedAt': product.updatedAt.toString(),
-    });
+    var response = await THttpHelper.postWithToken("user/cart/", {
+      "cart": [
+        {
+          "_id": products[index].id,
+          "count": 1
+        }
+      ]
+    }, cartController.token);
+    if(response != null){
+      HelperFunctions.showSnackBar(TTexts.successful, TTexts.cartAddedSuccess);
+    }else{
+      HelperFunctions.showSnackBar(TTexts.fail, TTexts.addCartFailed);
+
+    }
   }
 
   void updateQuery(String newQuery) {
@@ -77,8 +84,13 @@ class TSearchController extends GetxController {
   }
 
   Future<void> getProducts(String categoryId) async {
-    final fetchedProducts = await DataProvider.getAllData(
-        DataType.product, 'product/category/$categoryId');
+    String endpoint = 'product';
+    if (categoryId != '') {
+      endpoint = 'product/category/$categoryId';
+    }
+
+    final fetchedProducts =
+        await DataProvider.getAllData(DataType.product, endpoint);
     products.assignAll(fetchedProducts);
     sortProducts();
   }

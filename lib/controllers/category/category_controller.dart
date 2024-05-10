@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:fruitshop/controllers/home/home_controller.dart';
 import 'package:fruitshop/screens/search/search.dart';
 import 'package:get/get.dart';

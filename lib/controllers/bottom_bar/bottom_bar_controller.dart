@@ -1,3 +1,4 @@
+import 'package:fruitshop/controllers/cart/cart_controller.dart';
 import 'package:fruitshop/controllers/home/home_binding.dart';
 import 'package:fruitshop/screens/cart/cart.dart';
 import 'package:fruitshop/screens/category/category.dart';
@@ -8,6 +9,7 @@ import 'package:get/get.dart';
 
 class BottomBarController extends GetxController {
   BottomBarController get instance => Get.find();
+  CartController cartController = Get.put(CartController());
 
   final screens = [
     GetPage(name: '/home', page: () => const Home(), binding: HomeBinding()),
@@ -30,5 +32,10 @@ class BottomBarController extends GetxController {
   ];
 
   final selectedItem = 0.obs;
-  void changeScreen(int index) => selectedItem.value = index;
+  void changeScreen(int index) {
+    if (index == 2) {
+      CartController.instance.getAllCartFromDB();
+    }
+    selectedItem.value = index;
+  }
 }
