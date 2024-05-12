@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class TAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -10,17 +9,9 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
-      leading: GestureDetector(
-        child: const Icon(Icons.arrow_back_ios),
-        onTap: () {
-          Get.back();
-        },
-      ),
-     
-      title: Text(
-        title,
-      ),
-      centerTitle: true,
+      surfaceTintColor: Colors.transparent,
+      leadingWidth: 40,
+      title: Text(title),
     );
   }
 

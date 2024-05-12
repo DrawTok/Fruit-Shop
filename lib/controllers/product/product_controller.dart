@@ -1,19 +1,20 @@
-import 'package:fruitshop/providers/data_provider.dart';
-import 'package:fruitshop/providers/database_provider.dart';
+import 'package:fruitshop/controllers/bottom_bar/bottom_bar_controller.dart';
+import 'package:fruitshop/http/http_client.dart';
+import 'package:fruitshop/models/product_model.dart';
+import 'package:fruitshop/utils/constants/text_strings.dart';
+import 'package:fruitshop/utils/helper/helper_function.dart';
 import 'package:get/get.dart';
 
 class ProductController extends GetxController {
   static ProductController get instance => Get.find();
 
-  var productInfo = Rxn<dynamic>();
+  late ProductModel product;
   var quantity = 1.obs;
+  final BottomBarController _controller = Get.find();
 
-  Future<void> getProductInfo(String productId) async {
-    productInfo.value = await DataProvider.getData('product/$productId');
-  }
 
   void handleIncrease() {
-    if (quantity.value < productInfo.value.quantity) {
+    if (quantity.value < product.quantity) {
       ++quantity.value;
     }
   }
@@ -25,25 +26,26 @@ class ProductController extends GetxController {
   }
 
   void addCart() async {
-    await DatabaseProvider.insertCart(
-      {
-        'id': productInfo.value.id,
-        'name': productInfo.value.name,
-        'description': productInfo.value.description,
-        'price': productInfo.value.price,
-        'quantity': productInfo.value.quantity,
-        'orderQuantity': quantity.value,
-        'image': productInfo.value.image,
-        'createdAt': productInfo.value.createdAt.toString(),
-        'updatedAt': productInfo.value.updatedAt.toString(),
-      },
-    );
+    product.orderQuantity = quantity.value;
+    var response = await THttpHelper.postWithToken("user/cart/", {
+      "cart": [
+        {
+          "_id": product.id,
+          "count": product.getOrderQuantity
+        }
+      ]
+    }, _controller.token);
+    if(response != null){
+      HelperFunctions.showSnackBar(TTexts.successful, TTexts.cartAddedSuccess);
+    }else{
+      HelperFunctions.showSnackBar(TTexts.fail, TTexts.errorResponse);
+
+    }
   }
 
   @override
   void onInit() {
-    var productId = Get.arguments?['productId'] ?? '';
-    getProductInfo(productId);
+    product = Get.arguments?['productModel'] ?? '';
     super.onInit();
   }
 }

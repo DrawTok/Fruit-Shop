@@ -3,7 +3,8 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 
 class THttpHelper {
-  static const String _baseUrl = 'https://project-server-android.onrender.com/api';
+  static const String _baseUrl =
+      'https://project-server-android.onrender.com/api';
 
   static Future<dynamic> get(String endpoint) async {
     final response = await http.get(Uri.parse('$_baseUrl/$endpoint'));
@@ -11,9 +12,8 @@ class THttpHelper {
   }
 
   static Future<dynamic> getWithToken(String endpoint, String token) async {
-    final response = await http.get(Uri.parse('$_baseUrl/$endpoint'), headers: {
-      'Authorization': 'Bearer $token'
-    });
+    final response = await http.get(Uri.parse('$_baseUrl/$endpoint'),
+        headers: {'Authorization': 'Bearer $token'});
     return _handleResponseList(response);
   }
 
@@ -27,14 +27,10 @@ class THttpHelper {
     }
   }
 
-  static Future<dynamic> post(
-      String endpoint, dynamic data) async {
-
+  static Future<dynamic> post(String endpoint, dynamic data) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/$endpoint'),
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: {'Content-Type': 'application/json'},
       body: json.encode(data),
     );
     return _handleResponse(response);
@@ -53,7 +49,6 @@ class THttpHelper {
     return _handleResponse(response);
   }
 
-
   static Future<dynamic> put(String endpoint, dynamic data) async {
     final response = await http.put(
       Uri.parse('$_baseUrl/$endpoint'),
@@ -63,14 +58,18 @@ class THttpHelper {
     return _handleResponse(response);
   }
 
-  static Future<dynamic> delete(String endpoint) async {
-    final response = await http.delete(Uri.parse('$_baseUrl/$endpoint'));
+  static Future<dynamic> deleteWithToken(String endpoint, String token) async {
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/$endpoint'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
     return _handleResponse(response);
   }
 
-  static Future<dynamic> _handleResponse(
-      http.Response response) async {
-
+  static Future<dynamic> _handleResponse(http.Response response) async {
     dynamic decodedResponse = json.decode(response.body);
     return decodedResponse;
   }

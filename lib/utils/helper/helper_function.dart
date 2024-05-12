@@ -4,6 +4,11 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fruitshop/local_storage/storage_utility.dart';
+import 'package:fruitshop/utils/constants/colors.dart';
+import 'package:fruitshop/utils/constants/sizes.dart';
+import 'package:fruitshop/utils/devices/device_utility.dart';
+import 'package:get/get.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class HelperFunctions {
   static void navigateToScreen(BuildContext context, Widget screen) {
@@ -14,25 +19,22 @@ class HelperFunctions {
     return Theme.of(context).brightness == Brightness.dark;
   }
 
-  /* static void showSnackBar(Map<String, dynamic> response, String title) {
-    Get.snackbar(
-        title,
-        UserCodes.getMessage(
-          response['code'],
-        ),
+  static void showSnackBar(String title, String content) {
+    Get.snackbar(title, content,
         snackPosition: SnackPosition.BOTTOM,
         margin: EdgeInsets.symmetric(
             vertical: TDeviceUtility.getBottomNavigationBarHeight() - 20,
             horizontal: TSizes.spacing10),
         icon: const Icon(Icons.close),
-        backgroundColor: Colors.white);
-  }*/
+        backgroundColor: TColors.graySecOpacity);
+  }
 
   static bool checkToken() {
     TLocalStorage localStorage = TLocalStorage();
-    String? token = localStorage.readData('token');
-    if (token != null) {
-      return true;
+    Map<String, dynamic>? user = localStorage.readData('user');
+    if (user != null) {
+      bool isTokenExpired = JwtDecoder.isExpired(user['token']);
+      return !isTokenExpired;
     }
     return false;
   }

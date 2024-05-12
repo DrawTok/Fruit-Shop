@@ -23,6 +23,12 @@ class SignUpForm extends GetView<SignUpController> {
             decoration: Styles.buildInputDecoration('Nhập email của bạn'),
           ),
           const SizedBox(height: TSizes.spacing16),
+          TextFormField(
+            onChanged: controller.setName,
+            validator: (value) => controller.checkLengthName(value),
+            decoration: Styles.buildInputDecoration('Họ tên'),
+          ),
+          const SizedBox(height: TSizes.spacing16),
           Obx(
             () => TextFormField(
               onChanged: controller.setPassword,
@@ -39,7 +45,7 @@ class SignUpForm extends GetView<SignUpController> {
               onChanged: controller.setConfirmPassword,
               obscureText: controller.showConfirmPassword.value,
               validator: (value) => controller.comparePassword(value),
-              decoration:Styles.buildInputDecoration('Nhập lại mật khẩu',
+              decoration: Styles.buildInputDecoration('Nhập lại mật khẩu',
                   onTap: controller.visibilityConfirmPassword,
                   isShow: controller.showConfirmPassword.value),
             ),

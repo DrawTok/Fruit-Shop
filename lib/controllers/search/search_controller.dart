@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:fruitshop/controllers/cart/cart_controller.dart';
+import 'package:fruitshop/controllers/bottom_bar/bottom_bar_controller.dart';
 import 'package:fruitshop/http/http_client.dart';
+import 'package:fruitshop/models/product_model.dart';
 import 'package:fruitshop/providers/data_provider.dart';
-import 'package:fruitshop/providers/database_provider.dart';
 import 'package:fruitshop/screens/product/product_detail.dart';
 import 'package:fruitshop/utils/constants/text_strings.dart';
 import 'package:fruitshop/utils/helper/helper_function.dart';
@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 
 class TSearchController extends GetxController {
   static TSearchController get instance => Get.find();
-  CartController cartController = Get.find();
+  final BottomBarController _controller = BottomBarController.instance;
 
   var products = [].obs;
   var filteredProducts = [].obs;
@@ -21,20 +21,19 @@ class TSearchController extends GetxController {
   var selectedOptions = 0.obs;
   Timer? _debounce;
 
-  void addCart(int index) async {
-    var response = await THttpHelper.postWithToken("user/cart/", {
-      "cart": [
+  void addCart(ProductModel productModel) async {
+    var response = await THttpHelper.postWithToken(
+        "user/cart/",
         {
-          "_id": products[index].id,
-          "count": 1
-        }
-      ]
-    }, cartController.token);
-    if(response != null){
+          "cart": [
+            {"_id": productModel.id, "count": 1}
+          ]
+        },
+        _controller.token);
+    if (response != null) {
       HelperFunctions.showSnackBar(TTexts.successful, TTexts.cartAddedSuccess);
-    }else{
-      HelperFunctions.showSnackBar(TTexts.fail, TTexts.addCartFailed);
-
+    } else {
+      HelperFunctions.showSnackBar(TTexts.fail, TTexts.errorResponse);
     }
   }
 
@@ -90,13 +89,13 @@ class TSearchController extends GetxController {
     }
 
     final fetchedProducts =
-        await DataProvider.getAllData(DataType.product, endpoint);
+        await DataProvider.getAllData(dataType: DataType.product, endpoint: endpoint);
     products.assignAll(fetchedProducts);
     sortProducts();
   }
 
-  void displayDetailProduct(String productId) {
-    Get.to(const ProductDetail(), arguments: {'productId': productId});
+  void displayDetailProduct(productModel) {
+    Get.to(const ProductDetail(), arguments: {'productModel': productModel});
   }
 
   @override

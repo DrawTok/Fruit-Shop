@@ -14,7 +14,9 @@ class Voucher extends StatelessWidget {
     VoucherController controller = Get.put(VoucherController());
 
     return Scaffold(
-        appBar: AppBar(title: const Text('Ưu đãi')),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text('Ưu đãi')),
         body: Obx(
           () {
             if (controller.isLoading.isTrue) {
@@ -28,7 +30,8 @@ class Voucher extends StatelessWidget {
                       itemCount: controller.vouchers.length,
                       itemBuilder: (_, index) => Padding(
                         padding: const EdgeInsets.all(TSizes.spacing8),
-                        child: ItemVoucher(index: index),
+                        child: ItemVoucher(index: index,
+                            voucherModel: controller.vouchers[index]),
                       ),
                     );
             }

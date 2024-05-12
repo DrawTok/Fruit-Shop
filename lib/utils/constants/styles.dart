@@ -19,6 +19,11 @@ class Styles {
   static TextStyle title2 =
       const TextStyle(fontSize: TSizes.textSize14, fontWeight: FontWeight.bold);
 
+  static TextStyle title2White = const TextStyle(
+      fontSize: TSizes.textSize14,
+      fontWeight: FontWeight.bold,
+      color: Colors.white);
+
   static TextStyle textImage = TextStyle(
       fontSize: 30, color: TColors.greenPrimary, fontWeight: FontWeight.bold);
 

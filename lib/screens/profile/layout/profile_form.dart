@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fruitshop/controllers/profile/profile_controller.dart';
 import 'package:fruitshop/utils/constants/colors.dart';
 import 'package:fruitshop/utils/constants/sizes.dart';
 import 'package:fruitshop/utils/constants/styles.dart';
-import 'package:fruitshop/utils/constants/text_strings.dart';
-import 'package:fruitshop/utils/devices/device_utility.dart';
+import 'package:get/get.dart';
 
-class ProfileForm extends StatelessWidget {
+class ProfileForm extends GetView<ProfileController> {
   const ProfileForm({super.key});
 
   @override
@@ -15,28 +15,10 @@ class ProfileForm extends StatelessWidget {
         children: [
           imageProfile(
               'Lê Thanh Hòa'), // Assuming this is a custom widget for displaying profile image
-          _buildForm('Lê Thanh Hòa', 'Họ tên', false),
-          _buildForm('12/11/2003', 'Ngày sinh', false),
-          _buildForm('lth121199@gmail.com', 'Email', true),
-          _buildForm('0399123456', 'Số điện thoại', false),
+          _buildForm("${controller.firstName} ${controller.lastName}", 'Họ tên',
+              false),
+          _buildForm(controller.email, 'Email', true),
           _buildForm('250 Kim Giang', 'Địa chỉ', false),
-          SizedBox(
-            height: TDeviceUtility.getBottomNavigationBarHeight(),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: TSizes.spacing20),
-            height: 50,
-            width: double.infinity,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: TColors.greenPrimary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(TSizes.borderRadius10))),
-                child: const Text(TTexts.tSave),
-                onPressed: () {}),
-          ),
         ],
       ),
     );

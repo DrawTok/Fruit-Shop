@@ -1,4 +1,5 @@
 import 'package:fruitshop/utils/constants/text_strings.dart';
+import 'package:get/get.dart';
 
 class ProductModel {
   final String id;
@@ -9,8 +10,7 @@ class ProductModel {
   String image;
   final DateTime createdAt;
   final DateTime updatedAt;
-  int? _orderQuantity;
-
+  final RxInt _orderQuantity = 0.obs;
 
   ProductModel({
     required this.id,
@@ -23,11 +23,9 @@ class ProductModel {
     required this.updatedAt,
   });
 
-  set orderQuantity(int quantity){
-    _orderQuantity = quantity;
-  }
+  set orderQuantity(int quantity) => _orderQuantity.value = quantity;
 
-  get getOrderQuantity => _orderQuantity;
+  get getOrderQuantity => _orderQuantity.value;
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     String imageUrl = TTexts.noImage;
@@ -39,16 +37,13 @@ class ProductModel {
     }
 
     return ProductModel(
-      id: json['_id'],
-      name: json['name'],
-      description: json['description'],
-      price: json['price'],
-      quantity: json['quantity'],
-      image: imageUrl,
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt'])
-    );
+        id: json['_id'],
+        name: json['name'],
+        description: json['description'],
+        price: json['price'],
+        quantity: json['quantity'],
+        image: imageUrl,
+        createdAt: DateTime.parse(json['createdAt']),
+        updatedAt: DateTime.parse(json['updatedAt']));
   }
-
-
 }

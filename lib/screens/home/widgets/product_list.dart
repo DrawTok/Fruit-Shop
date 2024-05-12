@@ -18,11 +18,7 @@ class ProductList extends GetView<HomeController> {
             ),
             delegate: SliverChildBuilderDelegate(
               (_, index) => ItemCard(
-                  index: index,
-                  productId: controller.products[index].id,
-                  image: controller.products[index].image,
-                  name: controller.products[index].name,
-                  price: controller.products[index].price,
+                  productModel: controller.products[index],
                   addCart: controller.addCart,
                   onShowDetail: controller.displayDetailProduct),
               childCount: controller.products.length,

@@ -16,13 +16,13 @@ class TFormSlider extends GetView<HomeController> {
       CarouselSlider(
           items: const [
             TRoundedImage(
-                url: 'assets/images/image_2.png',
+                url: 'assets/images/banner_1.jpg',
                 padding: EdgeInsets.symmetric(horizontal: 5)),
             TRoundedImage(
-                url: 'assets/images/image_1.png',
+                url: 'assets/images/banner_2.jpg',
                 padding: EdgeInsets.symmetric(horizontal: 5)),
             TRoundedImage(
-                url: 'assets/images/image.png',
+                url: 'assets/images/banner_3.jpg',
                 padding: EdgeInsets.symmetric(horizontal: 5)),
           ],
           options: CarouselOptions(

@@ -3,15 +3,15 @@ import 'package:fruitshop/screens/profile/layout/wallet.dart';
 import 'package:fruitshop/utils/constants/sizes.dart';
 import 'package:fruitshop/utils/constants/styles.dart';
 import 'package:fruitshop/utils/constants/text_strings.dart';
+import 'package:fruitshop/widgets/app_bar.dart';
 
 class PaymentMethod extends StatelessWidget {
   const PaymentMethod({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(title: const Text(TTexts.addMethod)),
+    return Scaffold(
+        appBar: const TAppBar(title: TTexts.addMethod),
         body: Padding(
           padding: const EdgeInsets.all(TSizes.spacing20),
           child: Column(
@@ -33,7 +33,7 @@ class PaymentMethod extends StatelessWidget {
             ],
           ),
         ),
-      ),
+
     );
   }
 }

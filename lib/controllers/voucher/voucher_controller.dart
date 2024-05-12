@@ -14,11 +14,14 @@ class VoucherController extends GetxController {
   void _getVoucher() {
     isLoading.value = true;
 
-    DataProvider.getAllData(DataType.voucher, 'discount').then((vouchers) {
+    DataProvider.getAllData(dataType: DataType.voucher, endpoint: 'discount')
+        .then((vouchers) {
       this.vouchers.value = vouchers;
       isLoading.value = false;
     });
   }
+
+  void isExpiredVoucher() {}
 
   @override
   void onInit() {

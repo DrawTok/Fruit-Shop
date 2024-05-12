@@ -1,7 +1,9 @@
 import 'package:fruitshop/local_storage/storage_utility.dart';
+import 'package:fruitshop/providers/data_provider.dart';
 import 'package:fruitshop/screens/mapbox/mapbox_screen.dart';
 import 'package:fruitshop/screens/profile/widgets/payment_service.dart';
 import 'package:fruitshop/screens/profile/widgets/profile_info.dart';
+import 'package:fruitshop/screens/profile/widgets/purchase_detail.dart';
 import 'package:fruitshop/screens/profile/widgets/purchase_history.dart';
 import 'package:get/get.dart';
 
@@ -12,8 +14,9 @@ class ProfileController extends GetxController {
   String lastName = '';
   String email = '';
   String address = '';
+  String token = '';
   RxBool isLoading = true.obs;
-  var purchaseHistory = [].obs;
+  var orders = [].obs;
 
   void handleUserInfo() {
     TLocalStorage localStorage = TLocalStorage();
@@ -22,22 +25,23 @@ class ProfileController extends GetxController {
     firstName = dataUser['firstname'];
     lastName = dataUser['lastname'];
     email = dataUser['email'];
+    token = dataUser['token'];
   }
 
   void directionToInfo() {
-    Get.to(const ProfileInfo());
+    Get.to(() => const ProfileInfo());
   }
 
   void directionToPurchaseHistory() {
-    Get.to(const PurchaseHistory());
+    Get.to(() => const PurchaseHistory());
   }
 
   void directionToMap() {
-    Get.to(const MapBoxScreen());
+    Get.to(() => const MapBoxScreen());
   }
 
   void directionToPayment() {
-    Get.to(const PaymentService());
+    Get.to(() => const PaymentService());
   }
 
   void handleLogout() {
@@ -49,9 +53,22 @@ class ProfileController extends GetxController {
     Get.offAllNamed('/signIn');
   }
 
-  void getPurchaseHistory() {
-    isLoading.value = false;
+  //order
+  void getPurchaseHistory(){
+    isLoading.value = true;
+    DataProvider.getAllData(
+            dataType: DataType.order, endpoint: "user/carts", token: token)
+        .then((orders) {
+      this.orders.value = orders;
+      isLoading.value = false;
+    });
   }
+
+  void viewOrderDetails(int index){
+    Get.to(()=>PurchaseDetail(model: orders[index]));
+  }
+
+
 
   @override
   void onInit() {

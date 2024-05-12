@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fruitshop/utils/constants/colors.dart';
 import 'package:fruitshop/utils/constants/sizes.dart';
 
+final nameRegExp = RegExp(r'^[a-zA-ZÀ-Ỹà-ỹ\s]{8,50}$');
+
 final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
 final uppercaseRegExp = RegExp(r'[A-Z]');
 //final specialRegExp = RegExp(r'[!@#$%^&*(),.?":{}|<>]');

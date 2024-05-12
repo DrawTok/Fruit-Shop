@@ -1,32 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:fruitshop/models/product_model.dart';
 import 'package:fruitshop/utils/constants/colors.dart';
 import 'package:fruitshop/utils/constants/sizes.dart';
 import 'package:fruitshop/utils/constants/text_strings.dart';
 import 'package:fruitshop/utils/formatters/formatter.dart';
 
 class ItemCard extends StatelessWidget {
-  final int index;
-  final String productId;
-  final String image;
-  final String name;
-  final int price;
-  final Function(int index) addCart;
-  final Function(String productId) onShowDetail;
+  final ProductModel productModel;
+  final Function(ProductModel productModel) addCart;
+  final Function(ProductModel productModel) onShowDetail;
 
   const ItemCard(
       {super.key,
-      required this.index,
-      required this.productId,
-      required this.image,
-      required this.name,
-      required this.price,
+      required this.productModel,
       required this.addCart,
       required this.onShowDetail});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onShowDetail(productId),
+      onTap: () => onShowDetail(productModel),
       child: Container(
         decoration: BoxDecoration(
             color: TColors.graySecOpacity,
@@ -37,18 +30,18 @@ class ItemCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image(
-              image: image != TTexts.noImage
-                  ? NetworkImage(image) as ImageProvider
-                  : AssetImage(image),
+              image: productModel.image != TTexts.noImage
+                  ? NetworkImage(productModel.image) as ImageProvider
+                  : AssetImage(productModel.image),
               height: 100,
               fit: BoxFit.contain,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(productModel.name, style: const TextStyle(fontWeight: FontWeight.bold)),
                 Text(
-                  TFormatter.formatCurrency(price),
+                  TFormatter.formatCurrency(productModel.price),
                   style: TextStyle(color: TColors.grayText),
                 ),
               ],
@@ -56,7 +49,7 @@ class ItemCard extends StatelessWidget {
             SizedBox(
                 height: 30,
                 child: OutlinedButton(
-                  onPressed: () => addCart(index),
+                  onPressed: () => addCart(productModel),
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(
                       color: TColors.greenPrimary,

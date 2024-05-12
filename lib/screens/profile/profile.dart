@@ -12,7 +12,6 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const name = 'Lê Thanh Hòa';
     ProfileController controller = Get.put(ProfileController());
 
     return Scaffold(
@@ -22,7 +21,7 @@ class Profile extends StatelessWidget {
         },
         body: Column(
           children: [
-            imageProfile(name),
+            imageProfile("${controller.firstName} ${controller.lastName}"),
             Expanded(
               child: GridView(
                 padding: const EdgeInsets.all(TSizes.spacing16),
@@ -39,9 +38,14 @@ class Profile extends StatelessWidget {
                     direction: controller.directionToInfo,
                   ),
                   ProfileUtility(
+                    imageUrl: 'assets/images/location.png',
+                    title: 'Vị trí',
+                    direction: controller.directionToMap,
+                  ),
+                  ProfileUtility(
                     imageUrl: 'assets/images/invoice.png',
                     title: 'Đơn hàng',
-                    direction: controller.directionToInfo
+                    direction: controller.directionToPurchaseHistory
                   ),
                   ProfileUtility(
                     imageUrl: 'assets/images/payment.png',

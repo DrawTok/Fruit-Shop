@@ -1,23 +1,23 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:fruitshop/controllers/bottom_bar/bottom_bar_controller.dart';
 import 'package:fruitshop/controllers/profile/profile_controller.dart';
 import 'package:fruitshop/http/http_client.dart';
 import 'package:fruitshop/http/http_payment.dart';
-import 'package:fruitshop/local_storage/storage_utility.dart';
 import 'package:fruitshop/models/product_model.dart';
-import 'package:fruitshop/providers/database_provider.dart';
 import 'package:fruitshop/screens/cart/widgets/shipping_info.dart';
 import 'package:fruitshop/screens/voucher/voucher.dart';
+import 'package:fruitshop/utils/constants/text_strings.dart';
 import 'package:fruitshop/utils/helper/helper_function.dart';
 import 'package:fruitshop/utils/validators/validation.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
 class CartController extends GetxController {
   static CartController get instance => Get.find<CartController>();
+  final BottomBarController _controller = Get.find<BottomBarController>();
   ProfileController profileController = Get.put(ProfileController());
 
   //info screen
@@ -37,7 +37,6 @@ class CartController extends GetxController {
   int? discount = 0;
   var nameCoupons = '';
   Timer? _updateDebounce;
-  String token = "";
 
   void handleQuantityChange(int index, int changeAmount) {
     /*var product = Map.from(products[index]);
@@ -52,7 +51,7 @@ class CartController extends GetxController {
     if (newQuantity < 1) {
       totalAmount.value -= currentQuantity * price;
     } else {
-      product['orderQuantity'] = newQuantity;
+      product.orderQuantity = newQuantity;
       products[index] = product;
       totalAmount.value += changeAmount * price;
     }
@@ -73,14 +72,14 @@ class CartController extends GetxController {
     handleQuantityChange(index, -1);
   }
 
-  void handleUpdateProduct(int index, int count) {
+  void handleUpdateProduct(int index, int count) async {
     var productId = products[index].id;
     if (count < 1) {
       products.removeAt(index);
       checkBoxList.removeAt(index);
-      DatabaseProvider.deleteCart(productId);
+      handleDeleteProduct(productId);
     }
-    DatabaseProvider.updateCart(productId, {'orderQuantity': count});
+    //DatabaseProvider.updateCart(productId, {'orderQuantity': count});
   }
 
   void handleEdit() {
@@ -91,24 +90,29 @@ class CartController extends GetxController {
     checkBoxList[index].value = check;
   }
 
-  void onDeleteSelectedItem() {
+  void onDeleteSelectedItem() async {
     if (products.isEmpty) {
       return;
     }
-    var selectedProductIds = [];
 
     for (int i = checkBoxList.length - 1; i >= 0; i--) {
       if (checkBoxList[i].value == true) {
-        selectedProductIds.add(products[i].id);
+        await handleDeleteProduct(products[i].id);
         products.removeAt(i);
         checkBoxList.removeAt(i);
       }
     }
 
-    DatabaseProvider.deleteSelectedCart(selectedProductIds);
-
     calcTotalAmount();
     calcTotalPayment();
+  }
+
+  Future<void> handleDeleteProduct(String productId) async {
+    var response = await THttpHelper.deleteWithToken(
+        "user/delete-product-cart/$productId", _controller.token);
+    if (response == null) {
+      HelperFunctions.showSnackBar(TTexts.fail, TTexts.errorResponse);
+    }
   }
 
   void applyCoupons() async {
@@ -167,11 +171,9 @@ class CartController extends GetxController {
             })
         .toList();
     var response = await THttpHelper.postWithToken(
-        "user/cart/", {"cart": cartItems}, token);
-    if (response["products"] != null) {
-      print("Success");
-    } else {
-      print("Error");
+        "user/cart/", {"cart": cartItems}, _controller.token);
+    if (response["products"] == null) {
+      HelperFunctions.showSnackBar(TTexts.fail, TTexts.errorResponse);
     }
   }
 
@@ -196,7 +198,7 @@ class CartController extends GetxController {
           "orderItems": orderItems,
           "totalPrice": totalPayment.value
         },
-        token);
+        _controller.token);
 
     return response;
   }
@@ -207,13 +209,12 @@ class CartController extends GetxController {
       return;
     }
 
-
     var response = await createOrder();
     String orderId = response["order"]["_id"];
-    if(orderId.isNotEmpty){
+    if (orderId.isNotEmpty && selectedOptions.value == 1) {
       sendDataToMoMo(orderId);
-    }else{
-      print("Error responseOrderId");
+    } else {
+      HelperFunctions.showSnackBar(TTexts.successful, TTexts.errorResponse);
     }
   }
 
@@ -268,7 +269,8 @@ class CartController extends GetxController {
 
   Future<void> getAllCartFromDB() async {
     isLoading.value = true;
-    var response = await THttpHelper.getWithToken("user/cart", token);
+    var response =
+        await THttpHelper.getWithToken("user/cart", _controller.token);
 
     if (response.isNotEmpty && response[0]["products"] != null) {
       List<ProductModel> productList = [];
@@ -293,9 +295,6 @@ class CartController extends GetxController {
 
   @override
   void onInit() {
-    TLocalStorage localStorage = TLocalStorage();
-    Map<String, dynamic>? user = localStorage.readData('user');
-    token = user!['token'];
     //getAllCartFromDB();
     super.onInit();
   }

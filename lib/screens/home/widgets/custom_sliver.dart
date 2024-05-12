@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:fruitshop/controllers/home/home_controller.dart';
 import 'package:fruitshop/utils/constants/colors.dart';
 import 'package:fruitshop/utils/constants/sizes.dart';
 import 'package:fruitshop/utils/constants/text_strings.dart';
+import 'package:get/get.dart';
 
-class TSliverAppBar extends StatelessWidget {
+class TSliverAppBar extends GetView<HomeController> {
   const TSliverAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      automaticallyImplyLeading: false,
       pinned: true,
       toolbarHeight: 120,
       backgroundColor: Colors.white,
@@ -29,9 +32,9 @@ class TSliverAppBar extends StatelessWidget {
                       borderRadius: BorderRadius.circular(TSizes.spacing8)),
                   child: IconButton(
                       color: TColors.greenPrimary,
-                      onPressed: () {},
+                      onPressed: controller.openContacts,
                       icon: Icon(
-                        Icons.shopping_cart,
+                        Icons.phone,
                         color: TColors.greenPrimary,
                       )),
                 )
@@ -46,12 +49,15 @@ class TSliverAppBar extends StatelessWidget {
               borderRadius: BorderRadius.circular(TSizes.borderRadius4),
               color: TColors.graySecOpacity,
             ),
-            child: const Row(
-              children: [
-                Icon(Icons.search),
-                Expanded(
-                    child: Text('Tìm kiếm', style: TextStyle(fontSize: 14)))
-              ],
+            child: GestureDetector(
+              onTap: controller.onSearch,
+              child: const Row(
+                children: [
+                  Icon(Icons.search),
+                  Expanded(
+                      child: Text('Tìm kiếm', style: TextStyle(fontSize: 14)))
+                ],
+              ),
             ),
           ),
         ],

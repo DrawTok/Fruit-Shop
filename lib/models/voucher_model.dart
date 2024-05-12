@@ -12,6 +12,11 @@ class VoucherModel {
       required this.startDate,
       required this.endDate});
 
+  bool isExpired(){
+    DateTime current = DateTime.now();
+    return endDate.isBefore(current);
+  }
+
   factory VoucherModel.fromJson(Map<String, dynamic> json) {
     
     return VoucherModel(

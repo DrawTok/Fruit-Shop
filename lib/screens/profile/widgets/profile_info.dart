@@ -7,7 +7,10 @@ class ProfileInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Thông tin')),
+        appBar: AppBar(
+          title: const Text('Thông tin'),
+          actions: [TextButton(onPressed: () {}, child: const Text('Lưu'))],
+        ),
         backgroundColor: Colors.white,
         body: const ProfileForm());
   }
