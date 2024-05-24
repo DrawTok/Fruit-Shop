@@ -39,24 +39,28 @@ class ShippingInfo extends GetView<CartController> {
                       TextFormField(
                         onChanged: controller.setStreetAddress,
                         keyboardType: TextInputType.streetAddress,
+                        validator: (value) {
+                          if (value == '') {
+                            return "Street name is required";
+                          }
+                        },
                         decoration:
                             Styles.buildInputDecoration('Tên đường / Số nhà'),
                       ),
                       const SizedBox(height: TSizes.sizeBoxHeight10),
-                      Obx(() => Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: TSizes.spacing16,
-                                horizontal: TSizes.spacing20),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: TColors.graySecondary),
-                              borderRadius:
-                                  BorderRadius.circular(TSizes.borderRadius10),
-                            ),
-                            child: Text(controller.address.value == ''
-                                ? "Địa chỉ"
-                                : controller.address.value),
-                          )),
+                      TextFormField(
+                          controller: controller.textEditingController,
+                          onChanged: controller.setAddress,
+                          keyboardType: TextInputType.text,
+                          validator: (value) {
+                            if (value == '') {
+                              return "Address is required";
+                            }
+                            return null;
+                          },
+                          decoration: Styles.buildInputDecoration('Địa chỉ'),
+                        ),
+                      
                       const SizedBox(height: TSizes.sizeBoxHeight10),
                       OutlinedButton(
                           style: OutlinedButton.styleFrom(

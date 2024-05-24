@@ -27,12 +27,13 @@ class CartController extends GetxController {
   var formKeyInfo = GlobalKey<FormState>();
   String phone = '', streetAddress = '';
   RxString address = ''.obs;
+  final TextEditingController textEditingController = TextEditingController();
   int preSelected = 0;
   RxInt selectedOptions = 0.obs;
 
   //cart screen
   var products = [].obs;
-  RxBool isLoading = true.obs;
+  RxBool isLoading = false.obs;
   RxBool isLoadGPS = false.obs;
   RxBool isEdit = false.obs;
   var checkBoxList = <RxBool>[].obs;
@@ -44,7 +45,6 @@ class CartController extends GetxController {
   Timer? _updateDebounce;
 
   void handleQuantityChange(int index, int changeAmount) {
-
     var product = products[index];
     int currentQuantity = product.getOrderQuantity;
     int price = product.price;
@@ -177,9 +177,9 @@ class CartController extends GetxController {
           position.latitude, position.longitude, accessToken);
 
       Feature feature = Feature.fromJson(response["features"][0]);
-      address.value = "${feature.properties.name},"
+      setAddress("${feature.properties.name},"
           " ${feature.properties.context.locality.name},"
-          " ${feature.properties.context.place.name}";
+          " ${feature.properties.context.place.name}");
       isLoadGPS.value = false;
     }
   }
@@ -307,10 +307,11 @@ class CartController extends GetxController {
 
   @override
   void onInit() {
+    ever(address, (value) => textEditingController.text = value);
     ever(_controller.products, (callback) => getAllCartFromDB());
     super.onInit();
   }
-  
+
   @override
   void dispose() {
     _updateDebounce?.cancel();

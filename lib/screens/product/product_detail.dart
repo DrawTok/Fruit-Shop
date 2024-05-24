@@ -43,11 +43,13 @@ class ProductDetail extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(TSizes.spacing10),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildProductInfo(name, price),
                         Align(
                             alignment: Alignment.topLeft,
                             child: Text(description)),
+                        Text('Số lượng còn lại: ${controller.product.quantity}')
                       ],
                     ),
                   ),

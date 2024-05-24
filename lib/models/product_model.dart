@@ -35,11 +35,13 @@ class ProductModel {
         imageUrl = image['url'];
       }
     }
+    String description = json['description'];
+    description = description.replaceAll('<p>', '').replaceAll('</p>', '');
 
     return ProductModel(
         id: json['_id'],
         name: json['name'],
-        description: json['description'],
+        description: description,
         price: json['price'],
         quantity: json['quantity'],
         image: imageUrl,

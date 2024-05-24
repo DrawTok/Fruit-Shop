@@ -102,6 +102,13 @@ class PurchaseDetail extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            const Text(TTexts.orderStatus),
+            Text(model.orderStatus)
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
             const Text(TTexts.paymentMethod),
             Text(model.shippingModel.methodPayment)
           ],

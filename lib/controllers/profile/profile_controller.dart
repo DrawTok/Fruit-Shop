@@ -54,26 +54,26 @@ class ProfileController extends GetxController {
   }
 
   //order
-  void getPurchaseHistory() {
+  void getPurchaseHistory(){
     isLoading.value = true;
     DataProvider.getAllData(
             dataType: DataType.order, endpoint: "user/carts", token: token)
         .then((orders) {
-      this.orders.value = orders;
-      orders.reversed;
+      this.orders.value = orders.reversed.toList();
       isLoading.value = false;
     });
   }
 
-  void viewOrderDetails(int index) {
-    Get.to(() => PurchaseDetail(model: orders[index]));
+  void viewOrderDetails(int index){
+    Get.to(()=>PurchaseDetail(model: orders[index]));
   }
 
   @override
-  Future<void> refresh() async {
+  Future<void> refresh() async{
     handleUserInfo();
     getPurchaseHistory();
   }
+
 
   @override
   void onInit() {

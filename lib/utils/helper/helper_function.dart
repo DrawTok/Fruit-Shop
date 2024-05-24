@@ -25,6 +25,7 @@ class HelperFunctions {
     if (title == TTexts.successful) {
       color = Colors.green;
     }
+    
     Get.snackbar(title, content,
         colorText: color,
         snackPosition: SnackPosition.BOTTOM,
