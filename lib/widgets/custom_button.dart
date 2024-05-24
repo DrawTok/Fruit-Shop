@@ -4,9 +4,14 @@ import 'package:fruitshop/utils/constants/sizes.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
+  final Color bgColor;
   final VoidCallback onPressed;
 
-  const CustomButton({super.key, required this.text, required this.onPressed});
+  const CustomButton(
+      {super.key,
+      required this.text,
+      required this.bgColor,
+      required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +20,7 @@ class CustomButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: TColors.greenPrimary,
+          backgroundColor: bgColor,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(TSizes.borderRadius10),

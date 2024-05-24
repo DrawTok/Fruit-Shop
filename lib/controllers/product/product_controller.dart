@@ -36,6 +36,7 @@ class ProductController extends GetxController {
       ]
     }, _controller.token);
     if(response != null){
+      _controller.getCarts();
       HelperFunctions.showSnackBar(TTexts.successful, TTexts.cartAddedSuccess);
     }else{
       HelperFunctions.showSnackBar(TTexts.fail, TTexts.errorResponse);

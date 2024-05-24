@@ -68,12 +68,16 @@ class ProfileController extends GetxController {
     Get.to(()=>PurchaseDetail(model: orders[index]));
   }
 
+  @override
+  Future<void> refresh() async{
+    handleUserInfo();
+    getPurchaseHistory();
+  }
 
 
   @override
   void onInit() {
-    handleUserInfo();
-    getPurchaseHistory();
+    refresh();
     super.onInit();
   }
 }

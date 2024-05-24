@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fruitshop/utils/constants/colors.dart';
 import 'package:fruitshop/utils/constants/sizes.dart';
 import 'package:fruitshop/utils/constants/styles.dart';
+import 'package:fruitshop/utils/constants/text_strings.dart';
 
 class ItemCategory extends StatelessWidget {
   const ItemCategory(
@@ -22,6 +23,9 @@ class ItemCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Image errorImage =
+        Image.asset(TTexts.noImage, height: 50, fit: BoxFit.contain);
+
     return GestureDetector(
       onTap: () {
         onChooseCategory(id);
@@ -40,13 +44,12 @@ class ItemCategory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image(
-                  image: isNetworkImage
-                      ? NetworkImage(imageUrl)
-                      : AssetImage(imageUrl) as ImageProvider,
-                  height: 50,
-                  fit: BoxFit.contain,
-                ),
+                isNetworkImage
+                    ? Image.network(imageUrl,
+                        errorBuilder: (context, error, stackTrace) {
+                        return errorImage;
+                      }, height: 50, fit: BoxFit.contain)
+                    : errorImage,
                 const SizedBox(height: TSizes.spacing8),
                 Text(
                   nameCategory,

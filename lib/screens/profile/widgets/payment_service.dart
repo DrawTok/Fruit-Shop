@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fruitshop/screens/profile/layout/wallet.dart';
 import 'package:fruitshop/screens/profile/widgets/payment_method.dart';
+import 'package:fruitshop/utils/constants/colors.dart';
 import 'package:fruitshop/utils/constants/sizes.dart';
 import 'package:fruitshop/utils/constants/styles.dart';
 import 'package:fruitshop/utils/constants/text_strings.dart';
@@ -26,6 +27,7 @@ class PaymentService extends StatelessWidget {
               const Spacer(),
               CustomButton(
                   text: TTexts.paymentMethod,
+                  bgColor: TColors.greenPrimary,
                   onPressed: () {
                     Get.to(const PaymentMethod());
                   }),

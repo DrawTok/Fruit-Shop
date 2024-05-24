@@ -47,6 +47,10 @@ class Styles {
         borderSide: BorderSide(color: TColors.graySecondary),
         borderRadius: BorderRadius.circular(TSizes.borderRadius10),
       ),
+      disabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: TColors.graySecondary),
+        borderRadius: BorderRadius.circular(TSizes.borderRadius10),
+      ),
       hintText: labelText,
       errorBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.red.shade800),

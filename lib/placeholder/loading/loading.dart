@@ -2,14 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:fruitshop/utils/constants/colors.dart';
 
 class TLoading extends StatelessWidget {
-  const TLoading({super.key});
+
+  final double? size;
+
+  const TLoading({super.key, this.size});
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: CircularProgressIndicator(
-      color: TColors.greenPrimary,
-      backgroundColor: Colors.white,
-    ));
+        child: SizedBox(
+          height: size,
+          width: size,
+          child: CircularProgressIndicator(
+                color: TColors.greenPrimary,
+                backgroundColor: Colors.white,
+              ),
+        ));
   }
 }

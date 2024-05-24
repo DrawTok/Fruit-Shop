@@ -52,11 +52,11 @@ class Profile extends StatelessWidget {
                     title: TTexts.payment,
                     direction: controller.directionToPayment
                   ),
-                  ProfileUtility(
+                  /* ProfileUtility(
                     imageUrl: 'assets/images/customer-service.png',
                     title: 'CSKH',
                     direction: controller.directionToInfo
-                  ),
+                  ), */
                   ProfileUtility(
                     imageUrl: 'assets/images/logout.png',
                     title: 'Đăng xuất',

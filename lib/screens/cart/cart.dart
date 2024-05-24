@@ -10,12 +10,12 @@ import 'package:fruitshop/utils/constants/text_strings.dart';
 import 'package:fruitshop/widgets/custom_button.dart';
 import 'package:get/get.dart';
 
-class Cart extends GetView<CartController> {
+class Cart extends StatelessWidget {
   const Cart({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final CartController controller = Get.find();
+    final CartController controller = Get.put(CartController());
 
     return SafeArea(
       child: Scaffold(
@@ -43,8 +43,8 @@ class Cart extends GetView<CartController> {
                     const EdgeInsets.symmetric(horizontal: TSizes.spacing16),
                 child: Column(
                   children: [
-                    buildEmptyOrListView(),
-                    buildOrderDetail(),
+                    buildEmptyOrListView(controller),
+                    buildOrderDetail(controller),
                   ],
                 ),
               )),
@@ -52,7 +52,7 @@ class Cart extends GetView<CartController> {
     );
   }
 
-  Widget buildEmptyOrListView() {
+  Widget buildEmptyOrListView(CartController controller) {
     return Obx(
       () => controller.products.isEmpty
           ? const Expanded(child: NoItem())
@@ -71,13 +71,14 @@ class Cart extends GetView<CartController> {
     );
   }
 
-  Widget buildOrderDetail() {
+  Widget buildOrderDetail(CartController controller) {
     return Obx(
       () => Column(
         children: [
           if (controller.products.isNotEmpty) ...[
             OrderDetail(key: ValueKey<int>(controller.totalPayment.value)),
             CustomButton(
+              bgColor: TColors.greenPrimary,
               text: controller.isEdit.isFalse
                   ? TTexts.createOrder
                   : TTexts.deleteItem,

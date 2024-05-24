@@ -1,5 +1,4 @@
 import 'package:fruitshop/models/order_item.dart';
-import 'package:fruitshop/models/product_model.dart';
 import 'package:fruitshop/models/shipping_model.dart';
 
 class OrderModel {

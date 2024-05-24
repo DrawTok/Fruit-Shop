@@ -5,12 +5,15 @@ import 'package:fruitshop/controllers/bottom_bar/bottom_bar_controller.dart';
 import 'package:fruitshop/controllers/profile/profile_controller.dart';
 import 'package:fruitshop/http/http_client.dart';
 import 'package:fruitshop/http/http_payment.dart';
-import 'package:fruitshop/models/product_model.dart';
+import 'package:fruitshop/models/mapbox/feature.dart';
 import 'package:fruitshop/screens/cart/widgets/shipping_info.dart';
+import 'package:fruitshop/screens/profile/widgets/purchase_history.dart';
 import 'package:fruitshop/screens/voucher/voucher.dart';
 import 'package:fruitshop/utils/constants/text_strings.dart';
+import 'package:fruitshop/utils/devices/device_utility.dart';
 import 'package:fruitshop/utils/helper/helper_function.dart';
 import 'package:fruitshop/utils/validators/validation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
@@ -18,17 +21,19 @@ import 'package:uuid/uuid.dart';
 class CartController extends GetxController {
   static CartController get instance => Get.find<CartController>();
   final BottomBarController _controller = Get.find<BottomBarController>();
-  ProfileController profileController = Get.put(ProfileController());
+  final ProfileController profileController = Get.put(ProfileController());
 
   //info screen
   var formKeyInfo = GlobalKey<FormState>();
-  String phone = '', address = '';
+  String phone = '', streetAddress = '';
+  RxString address = ''.obs;
   int preSelected = 0;
   RxInt selectedOptions = 0.obs;
 
   //cart screen
   var products = [].obs;
   RxBool isLoading = true.obs;
+  RxBool isLoadGPS = false.obs;
   RxBool isEdit = false.obs;
   var checkBoxList = <RxBool>[].obs;
   var totalAmount = 0.obs;
@@ -39,9 +44,6 @@ class CartController extends GetxController {
   Timer? _updateDebounce;
 
   void handleQuantityChange(int index, int changeAmount) {
-    /*var product = Map.from(products[index]);
-    int currentQuantity = product.getOrderQuantity;
-    int price = product.price;*/
 
     var product = products[index];
     int currentQuantity = product.getOrderQuantity;
@@ -102,6 +104,7 @@ class CartController extends GetxController {
         checkBoxList.removeAt(i);
       }
     }
+    _controller.getCarts();
 
     calcTotalAmount();
     calcTotalPayment();
@@ -161,7 +164,25 @@ class CartController extends GetxController {
 
   String? validatePhone(String? value) => TValidator.validatePhoneNumber(value);
 
-  void setAddress(String value) => address = value;
+  void setStreetAddress(String value) => streetAddress = value;
+
+  void setAddress(String value) => address.value = value;
+
+  void getMyLocation() async {
+    isLoadGPS.value = true;
+    Position? position = await TDeviceUtility.requestPermission();
+    String accessToken = dotenv.env["ACCESS_TOKEN_MAP"]!;
+    if (position != null) {
+      var response = await THttpHelper.getAddress(
+          position.latitude, position.longitude, accessToken);
+
+      Feature feature = Feature.fromJson(response["features"][0]);
+      address.value = "${feature.properties.name},"
+          " ${feature.properties.context.locality.name},"
+          " ${feature.properties.context.place.name}";
+      isLoadGPS.value = false;
+    }
+  }
 
   Future<void> addProductToCartDB() async {
     var cartItems = products
@@ -190,7 +211,7 @@ class CartController extends GetxController {
           "shippingInfor": {
             "firstname": profileController.firstName,
             "lastname": profileController.lastName,
-            "address": address,
+            "address": "$streetAddress, $address",
             "email": profileController.email,
             "methodPayment": selectedOptions.value == 0 ? "Tien mat" : "MoMo",
             "phoneNumber": phone
@@ -210,11 +231,12 @@ class CartController extends GetxController {
     }
 
     var response = await createOrder();
+    print("Response: $response");
     String orderId = response["order"]["_id"];
     if (orderId.isNotEmpty && selectedOptions.value == 1) {
       sendDataToMoMo(orderId);
     } else {
-      HelperFunctions.showSnackBar(TTexts.successful, TTexts.errorResponse);
+      HelperFunctions.showSnackBar(TTexts.successful, TTexts.orderSuccess);
     }
   }
 
@@ -261,32 +283,22 @@ class CartController extends GetxController {
   Future<void> openMoMo(String deepLink) async {
     Uri uri = Uri.parse(deepLink);
     if (await canLaunchUrl(uri)) {
-      launchUrl(uri);
-    } else {
-      throw 'Can not open app';
+      bool launched = await launchUrl(uri);
+      if (launched) {
+        await Get.to(() => const PurchaseHistory());
+      } else {
+        throw 'Can not open app';
+      }
     }
   }
 
-  Future<void> getAllCartFromDB() async {
+  void getAllCartFromDB() {
     isLoading.value = true;
-    var response =
-        await THttpHelper.getWithToken("user/cart", _controller.token);
 
-    if (response.isNotEmpty && response[0]["products"] != null) {
-      List<ProductModel> productList = [];
-      ProductModel model;
-      for (var index = 0; index < response[0]["products"].length; index++) {
-        model =
-            ProductModel.fromJson(response[0]["products"][index]["product"]);
-        model.orderQuantity = response[0]["products"][index]["count"];
-        productList.add(model);
-      }
-      products.assignAll(productList);
-
-      if (products.isNotEmpty) {
-        checkBoxList.value =
-            List.generate(products.length, (index) => RxBool(false));
-      }
+    products.assignAll(_controller.products);
+    if (products.isNotEmpty) {
+      checkBoxList.value =
+          List.generate(products.length, (index) => RxBool(false));
     }
     calcTotalAmount();
     calcTotalPayment();
@@ -295,10 +307,10 @@ class CartController extends GetxController {
 
   @override
   void onInit() {
-    //getAllCartFromDB();
+    ever(_controller.products, (callback) => getAllCartFromDB());
     super.onInit();
   }
-
+  
   @override
   void dispose() {
     _updateDebounce?.cancel();

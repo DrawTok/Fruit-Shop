@@ -46,7 +46,11 @@ class SignInForm extends GetView<SignInController> {
             ),
           ),
           const SizedBox(height: TSizes.spacing16),
-          CustomButton(text: TTexts.signInName, onPressed: controller.onSubmit),
+          CustomButton(
+            text: TTexts.signInName,
+            onPressed: controller.onSubmit,
+            bgColor: TColors.greenPrimary,
+          ),
           const SizedBox(height: TSizes.spacing32),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

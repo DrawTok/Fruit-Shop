@@ -29,8 +29,7 @@ class TTexts {
   static const String requiredEmail = 'Bạn chưa nhập email';
   static const String invalidEmail = 'Địa chỉ email không hợp lệ';
   static const String requiredPassword = 'Bạn chưa nhập mật khẩu';
-  static const String invalidPassword =
-      'Mật khẩu phải có ít nhất 8 kí tự';
+  static const String invalidPassword = 'Mật khẩu phải có ít nhất 8 kí tự';
   static const String uppercasePassword =
       'Mật khẩu phải chứa ít nhất 1 kí tự in hoa';
 
@@ -49,6 +48,7 @@ class TTexts {
   static const String paymentMethod = 'Phương thức thanh toán';
 
   static const String cart = 'Giỏ hàng';
+  static const String outOfStock = 'Hết hàng';
   static const String addCart = 'Thêm vào giỏ';
   static const String edit = 'Chỉnh sửa';
   static const String deleteItem = 'Xóa tất cả mục đã chọn';
@@ -60,6 +60,7 @@ class TTexts {
   static const String couponsApplied = 'Đã áp dụng 1 mã giảm giá';
   static const String totalPayment = 'Thành tiền';
   static const String createOrder = 'Tạo đơn hàng';
+  static const String orderSuccess = 'Tạo đơn hàng thành công';
   static const String purchaseInfo = 'Thông tin đơn hàng';
   static const String viewDetails = "Chi tiết";
   static const String deliveryAddress = "Địa chỉ nhận hàng";

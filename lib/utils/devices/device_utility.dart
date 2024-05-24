@@ -1,9 +1,12 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/route_manager.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class TDeviceUtility {
   static void hideKeyBoard(BuildContext context) {
@@ -16,6 +19,33 @@ class TDeviceUtility {
       return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
     } on SocketException catch (_) {
       return false;
+    }
+  }
+
+  static Future<Position?> requestPermission() async {
+    var status = await Permission.location.request();
+
+    if (status.isGranted) {
+      try {
+        Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high,
+        );
+        return position;
+      } catch (error) {
+        log("Error getting position: $error");
+        return null;
+      }
+    } else if (status.isDenied) {
+      // Quyền bị từ chối
+      log("Location permission denied.");
+      return null;
+    } else if (status.isPermanentlyDenied) {
+      // Quyền bị từ chối vĩnh viễn
+      log("Location permission permanently denied.");
+      return null;
+    } else {
+      log("Location permission status: $status");
+      return null;
     }
   }
 

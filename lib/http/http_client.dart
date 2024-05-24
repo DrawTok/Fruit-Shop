@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:fruitshop/models/mapbox/coordinates.dart';
 import 'package:http/http.dart' as http;
 
 class THttpHelper {
   static const String _baseUrl =
       'https://project-server-android.onrender.com/api';
+
+  static const String _mapBoxUrl =
+      'https://api.mapbox.com/search/geocode/v6/reverse?';
 
   static Future<dynamic> get(String endpoint) async {
     final response = await http.get(Uri.parse('$_baseUrl/$endpoint'));
@@ -73,12 +77,25 @@ class THttpHelper {
     dynamic decodedResponse = json.decode(response.body);
     return decodedResponse;
   }
-}
 
-Future<dynamic> _handleResponseList(http.Response response) {
-  List<dynamic> jsonResponse = json.decode(response.body);
-  List<Map<String, dynamic>> dataList = jsonResponse.map((item) {
-    return Map<String, dynamic>.from(item);
-  }).toList();
-  return Future.value(dataList);
+  static Future<dynamic> _handleResponseList(http.Response response) {
+    List<dynamic> jsonResponse = json.decode(response.body);
+    List<Map<String, dynamic>> dataList = jsonResponse.map((item) {
+      return Map<String, dynamic>.from(item);
+    }).toList();
+    return Future.value(dataList);
+  }
+
+  static Future<dynamic> getAddress(double lat, double long, String token) async {
+
+    final response = await http.get(
+      Uri.parse('$_mapBoxUrl&access_token=$token'
+          '&latitude=$lat'
+          '&longitude=$long'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+    return _handleResponse(response);
+  }
 }

@@ -17,23 +17,26 @@ class PurchaseItem extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    String isPaid = orderModel.isPaid;
+    String orderStatus = orderModel.orderStatus;
     String orderDate = TFormatter.formatDate(orderModel.paidAt);
 
     return Container(
+      decoration: BoxDecoration(
+          color: TColors.graySecOpacity,
+          borderRadius: BorderRadius.circular(TSizes.borderRadius8)),
       padding: const EdgeInsets.all(TSizes.spacing8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text("Trạng thái: $isPaid", style: Styles.title2),
+            Text("Trạng thái: $orderStatus", style: Styles.title2),
             InkWell(
                 onTap: () {
                   controller.viewOrderDetails(index);
                 },
                 child: const Row(
                   children: [
-                   Text(TTexts.viewDetails),
+                    Text(TTexts.viewDetails),
                     SizedBox(width: TSizes.sizeBoxHeight4),
                     Icon(Icons.arrow_forward_ios, size: 10)
                   ],

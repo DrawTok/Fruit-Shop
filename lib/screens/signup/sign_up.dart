@@ -10,25 +10,24 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: const TAppBar(title: TTexts.signUpName),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: TSizes.spacing24),
-            child: Column(
-              children: [
-                Image.asset(
-                  'assets/icons/fruit_yeah.png',
-                  height: 200,
-                ),
-                const SizedBox(height: TSizes.sizeBoxHeight20),
-                Text(TTexts.welcomeBack.toUpperCase(), style: Styles.heading1),
-                const SizedBox(height: TSizes.sizeBoxHeight20),
-                const SignUpForm(),
-                const SizedBox(height: TSizes.sizeBoxHeight50),
-              ],
-            ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: const TAppBar(title: TTexts.signUpName),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: TSizes.spacing24),
+          child: Column(
+            children: [
+              Image.asset(
+                'assets/icons/fruit_yeah.png',
+                height: 200,
+              ),
+              const SizedBox(height: TSizes.sizeBoxHeight20),
+              Text(TTexts.welcomeBack.toUpperCase(), style: Styles.heading1),
+              const SizedBox(height: TSizes.sizeBoxHeight20),
+              const SignUpForm(),
+              const SizedBox(height: TSizes.sizeBoxHeight50),
+            ],
           ),
         ),
       ),

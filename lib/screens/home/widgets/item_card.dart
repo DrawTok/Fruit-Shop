@@ -18,6 +18,8 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool hasProductQuantity = productModel.quantity > 0;
+
     return GestureDetector(
       onTap: () => onShowDetail(productModel),
       child: Container(
@@ -39,7 +41,8 @@ class ItemCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(productModel.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(productModel.name,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
                 Text(
                   TFormatter.formatCurrency(productModel.price),
                   style: TextStyle(color: TColors.grayText),
@@ -49,17 +52,26 @@ class ItemCard extends StatelessWidget {
             SizedBox(
                 height: 30,
                 child: OutlinedButton(
-                  onPressed: () => addCart(productModel),
+                  onPressed: () {
+                    if (hasProductQuantity) {
+                      addCart(productModel);
+                    }
+                  },
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(
-                      color: TColors.greenPrimary,
+                      color: hasProductQuantity
+                          ? TColors.greenPrimary
+                          : TColors.redPrimary,
                     ),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
                   child: Text(
-                    'Add to cart',
-                    style: TextStyle(color: TColors.blackPrimary),
+                    hasProductQuantity ? TTexts.addCart : TTexts.outOfStock,
+                    style: TextStyle(
+                        color: hasProductQuantity
+                            ? TColors.blackPrimary
+                            : TColors.redPrimary),
                   ),
                 )),
           ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fruitshop/controllers/signup/signup_controller.dart';
+import 'package:fruitshop/utils/constants/colors.dart';
 import 'package:fruitshop/utils/constants/sizes.dart';
 import 'package:fruitshop/utils/constants/styles.dart';
 import 'package:fruitshop/utils/constants/text_strings.dart';
@@ -51,7 +52,10 @@ class SignUpForm extends GetView<SignUpController> {
             ),
           ),
           const SizedBox(height: TSizes.spacing16),
-          CustomButton(text: TTexts.signUpName, onPressed: controller.onSubmit),
+          CustomButton(
+              text: TTexts.signUpName,
+              onPressed: controller.onSubmit,
+              bgColor: TColors.greenPrimary),
           const SizedBox(height: TSizes.spacing32),
           const FormDivider(
             text: TTexts.questionHaveAccount,

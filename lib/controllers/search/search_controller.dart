@@ -12,6 +12,7 @@ class TSearchController extends GetxController {
   static TSearchController get instance => Get.find();
   final BottomBarController _controller = BottomBarController.instance;
 
+  RxBool isLoading = true.obs;
   var products = [].obs;
   var filteredProducts = [].obs;
   var id = '';
@@ -31,6 +32,7 @@ class TSearchController extends GetxController {
         },
         _controller.token);
     if (response != null) {
+      _controller.getCarts();
       HelperFunctions.showSnackBar(TTexts.successful, TTexts.cartAddedSuccess);
     } else {
       HelperFunctions.showSnackBar(TTexts.fail, TTexts.errorResponse);
@@ -83,6 +85,7 @@ class TSearchController extends GetxController {
   }
 
   Future<void> getProducts(String categoryId) async {
+    isLoading.value = true;
     String endpoint = 'product';
     if (categoryId != '') {
       endpoint = 'product/category/$categoryId';
@@ -92,6 +95,7 @@ class TSearchController extends GetxController {
         await DataProvider.getAllData(dataType: DataType.product, endpoint: endpoint);
     products.assignAll(fetchedProducts);
     sortProducts();
+    isLoading.value = false;
   }
 
   void displayDetailProduct(productModel) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fruitshop/controllers/search/search_controller.dart';
+import 'package:fruitshop/placeholder/loading/loading.dart';
 import 'package:fruitshop/screens/search/widgets/filter.dart';
 import 'package:fruitshop/screens/search/widgets/product_list.dart';
 import 'package:fruitshop/utils/constants/colors.dart';
@@ -29,13 +30,15 @@ class SearchScreen extends StatelessWidget {
                       icon: const Icon(Iconsax.filter))
                 ],
               ),
-              body: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: TSizes.spacing8),
-                child: const Column(
-                  children: [ProductList()],
-                ),
-              )),
+              body: controller.isLoading.isTrue
+                  ? const TLoading()
+                  : Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: TSizes.spacing8),
+                      child: const Column(
+                        children: [ProductList()],
+                      ),
+                    )),
     );
   }
 

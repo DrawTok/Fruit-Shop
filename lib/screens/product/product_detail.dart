@@ -14,7 +14,7 @@ class ProductDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ProductController controller = Get.put(ProductController());
-
+    bool hasProductQuantity = controller.product.quantity > 0;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -58,12 +58,13 @@ class ProductDetail extends StatelessWidget {
               color: TColors.graySecOpacity,
               child: Padding(
                 padding: const EdgeInsets.all(TSizes.spacing10),
-                child: _buildPriceSection(price, controller),
+                child:
+                    _buildPriceSection(price, controller, hasProductQuantity),
               ),
             )
           ],
         );
-            }),
+      }),
     );
   }
 
@@ -81,7 +82,8 @@ class ProductDetail extends StatelessWidget {
     );
   }
 
-  Widget _buildPriceSection(int price, ProductController controller) {
+  Widget _buildPriceSection(
+      int price, ProductController controller, bool hasProductQuantity) {
     int quantity = controller.quantity.value;
     String formattedPrice = TFormatter.formatCurrency(price * quantity);
     return Column(
@@ -92,13 +94,16 @@ class ProductDetail extends StatelessWidget {
             Text(formattedPrice, style: Styles.title2),
             Row(
               children: [
-                _buildButton(Icons.remove, Colors.black, Colors.grey,
+                _buildButton(Icons.remove, Colors.white, Colors.grey,
                     controller.handleDecrease),
                 const SizedBox(width: TSizes.spacing10),
                 Obx(() =>
                     Text('${controller.quantity.value}', style: Styles.title2)),
                 const SizedBox(width: TSizes.spacing10),
-                _buildButton(Icons.add, Colors.white, Colors.green,
+                _buildButton(
+                    Icons.add,
+                    Colors.white,
+                    hasProductQuantity ? Colors.green : Colors.grey,
                     controller.handleIncrease),
               ],
             )
@@ -106,8 +111,10 @@ class ProductDetail extends StatelessWidget {
         ),
         const SizedBox(height: TSizes.sizeBoxHeight20),
         CustomButton(
-          text: TTexts.addCart,
-          onPressed: controller.addCart,
+          text: hasProductQuantity ? TTexts.addCart : TTexts.outOfStock,
+          onPressed: hasProductQuantity ? controller.addCart : () {},
+          bgColor:
+              hasProductQuantity ? TColors.greenPrimary : TColors.redPrimary,
         ),
       ],
     );

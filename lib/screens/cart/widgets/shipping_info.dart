@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:fruitshop/controllers/cart/cart_controller.dart';
+import 'package:fruitshop/placeholder/loading/loading.dart';
 import 'package:fruitshop/utils/constants/colors.dart';
 import 'package:fruitshop/utils/constants/sizes.dart';
 import 'package:fruitshop/utils/constants/styles.dart';
 import 'package:fruitshop/widgets/app_bar.dart';
 import 'package:fruitshop/widgets/custom_button.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class ShippingInfo extends GetView<CartController> {
   const ShippingInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: const TAppBar(title: 'Thông tin vận chuyển'),
       body: Container(
@@ -21,10 +22,10 @@ class ShippingInfo extends GetView<CartController> {
         child: Form(
             key: controller.formKeyInfo,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Column(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFormField(
@@ -36,10 +37,42 @@ class ShippingInfo extends GetView<CartController> {
                       ),
                       const SizedBox(height: TSizes.sizeBoxHeight10),
                       TextFormField(
-                        onChanged: controller.setAddress,
+                        onChanged: controller.setStreetAddress,
                         keyboardType: TextInputType.streetAddress,
-                        decoration: Styles.buildInputDecoration('Địa chỉ'),
+                        decoration:
+                            Styles.buildInputDecoration('Tên đường / Số nhà'),
                       ),
+                      const SizedBox(height: TSizes.sizeBoxHeight10),
+                      Obx(() => Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: TSizes.spacing16,
+                                horizontal: TSizes.spacing20),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: TColors.graySecondary),
+                              borderRadius:
+                                  BorderRadius.circular(TSizes.borderRadius10),
+                            ),
+                            child: Text(controller.address.value == ''
+                                ? "Địa chỉ"
+                                : controller.address.value),
+                          )),
+                      const SizedBox(height: TSizes.sizeBoxHeight10),
+                      OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                              foregroundColor: TColors.greenPrimary,
+                              side: BorderSide(color: TColors.greenPrimary)),
+                          onPressed: controller.getMyLocation,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Obx(() => controller.isLoadGPS.isTrue
+                                  ? const TLoading(size: 16)
+                                  : const Icon(Icons.gps_fixed)),
+                              const SizedBox(width: TSizes.sizeBoxHeight10),
+                              const Text("Sử dụng vị trí hiện tại của tôi")
+                            ],
+                          )),
                       const SizedBox(height: TSizes.sizeBoxHeight20),
                       Text('Chọn phương thức thanh toán', style: Styles.title2),
                       const SizedBox(height: TSizes.sizeBoxHeight10),
@@ -50,11 +83,12 @@ class ShippingInfo extends GetView<CartController> {
                           controller.selectedOptions.value))
                     ],
                   ),
-                ),
-                CustomButton(
-                    text: 'Xác nhận thanh toán',
-                    onPressed: controller.handlePayment)
-              ],
+                  CustomButton(
+                      text: 'Xác nhận thanh toán',
+                      bgColor: TColors.greenPrimary,
+                      onPressed: controller.handlePayment)
+                ],
+              ),
             )),
       ),
     );
