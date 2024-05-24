@@ -82,6 +82,7 @@ class SignUpController extends GetxController {
 
     if (response['_id'] != null) {
       HelperFunctions.showSnackBar(TTexts.successful, TTexts.signUpSuccess);
+      Get.offAllNamed("/signIn");
     } else {
       HelperFunctions.showSnackBar(TTexts.fail, TTexts.signUpFail);
     }

@@ -78,6 +78,7 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     refresh();
+    ever(orders, (_) => refresh());
     super.onInit();
   }
 }
