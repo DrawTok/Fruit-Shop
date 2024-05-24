@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fruitshop/local_storage/storage_utility.dart';
 import 'package:fruitshop/utils/constants/colors.dart';
 import 'package:fruitshop/utils/constants/sizes.dart';
+import 'package:fruitshop/utils/constants/text_strings.dart';
 import 'package:fruitshop/utils/devices/device_utility.dart';
 import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -20,7 +21,12 @@ class HelperFunctions {
   }
 
   static void showSnackBar(String title, String content) {
+    Color color = Colors.red;
+    if (title == TTexts.successful) {
+      color = Colors.green;
+    }
     Get.snackbar(title, content,
+        colorText: color,
         snackPosition: SnackPosition.BOTTOM,
         margin: EdgeInsets.symmetric(
             vertical: TDeviceUtility.getBottomNavigationBarHeight() - 20,
