@@ -5,6 +5,7 @@ import 'package:fruitshop/controllers/signup/signup_binding.dart';
 import 'package:fruitshop/screens/category/category.dart';
 import 'package:fruitshop/screens/home/home.dart';
 import 'package:fruitshop/screens/profile/profile.dart';
+import 'package:fruitshop/screens/profile/widgets/purchase_history.dart';
 import 'package:fruitshop/screens/signin/sign_in.dart';
 import 'package:fruitshop/screens/signup/sign_up.dart';
 import 'package:fruitshop/widgets/bottom_bar.dart';
@@ -28,5 +29,9 @@ class Routes {
     GetPage(
         name: '/profile',
         page: () => const Profile()),
+
+    GetPage(
+        name: '/purchase',
+        page: () => const PurchaseHistory()),
   ];
 }

@@ -7,7 +7,6 @@ import 'package:fruitshop/http/http_client.dart';
 import 'package:fruitshop/http/http_payment.dart';
 import 'package:fruitshop/models/mapbox/feature.dart';
 import 'package:fruitshop/screens/cart/widgets/shipping_info.dart';
-import 'package:fruitshop/screens/profile/widgets/purchase_history.dart';
 import 'package:fruitshop/screens/voucher/voucher.dart';
 import 'package:fruitshop/utils/constants/text_strings.dart';
 import 'package:fruitshop/utils/devices/device_utility.dart';
@@ -225,13 +224,13 @@ class CartController extends GetxController {
   }
 
   void handlePayment() async {
+
     final isValid = formKeyInfo.currentState!.validate();
     if (!isValid) {
       return;
     }
 
     var response = await createOrder();
-    print("Response: $response");
     String orderId = response["order"]["_id"];
     if (orderId.isNotEmpty && selectedOptions.value == 1) {
       sendDataToMoMo(orderId);
@@ -285,7 +284,10 @@ class CartController extends GetxController {
     if (await canLaunchUrl(uri)) {
       bool launched = await launchUrl(uri);
       if (launched) {
-        await Get.to(() => const PurchaseHistory());
+        await Get.offAndToNamed('/purchase');
+        _controller.quantityCart.value = 0;
+        _controller.products.clear();
+        getAllCartFromDB();
       } else {
         throw 'Can not open app';
       }
